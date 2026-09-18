@@ -1,20 +1,28 @@
-# AI Creative Skills (AI 创意技能库)
+# AI Storyboard Master Skills (AI 分镜大师)
 
-面向 AI 影视短剧制作、图像修复与镜头拆解的工程化技能资产库。
+本仓库收录面向 AI 影视短剧与视觉生成工作流的高可用、强约束技能（Skills）。
+
+---
 
 ## 技能目录
 
-| 分类 | 技能名称 | 说明 | 核心依赖 / 规范 |
+| 文件名 | 技能名称 | 核心功能 | 触发方式 |
 | :--- | :--- | :--- | :--- |
-| **图像修复** | [4K-高清精修](skills/image-processing/4K-高清精修.md) | 一键 4K 超分辨率放大 | `dreamina_cli (image_super_resolution)` |
-| **剧本分镜** | [LeiStudioMaster 分镜头提示词拆解器](skills/prompt-engineering/LeiStudioMaster-分镜头拆解.md) | 工业级剧本转分镜提示词组 | 对白防火墙 / 时间锁 / 资产隔离 |
+| [`4K-高清精修.md`](./4K-高清精修.md) | 4K-高清精修 | 一键图片 4K 超分辨率放大（仅提升清晰度，不改画面元素） | 上传图片并要求 4K 高清放大 |
+| [`LeiStudioMaster分镜头拆解.md`](./LeiStudioMaster分镜头拆解.md) | 剧本 → 分镜头提示词拆解器 | 将剧本大纲工业化拆解为时码闭合、对白防火墙、资产隔离的 AI 视频提示词 | 输入剧本/大纲并要求拆解分镜 |
 
-## 目录结构
-```text
-ai-creative-skills/
-├── README.md
-└── skills/
-    ├── image-processing/
-    │   └── 4K-高清精修.md
-    └── prompt-engineering/
-        └── LeiStudioMaster-分镜头拆解.md
+---
+
+## 核心规范简要说明
+
+### 1. 4K-高清精修
+- **专注无损放大**：仅调用超分接口（`dreamina_cli image_super_resolution`），不做多余调色与重绘。
+- **三步闭环**：需求确认（4K/2K）→ 任务提交 → 结果查询展示。
+
+### 2. LeiStudioMaster 分镜头提示词拆解
+- **硬性流程**：先问画幅比例（16:9 / 9:16 等）与单组时限（15s / 30s）→ 输出分镜组总览 → 用户确认后输出单组提示词。
+- **四大铁律**：
+  1. **对白防火墙**：所有台词唯一收录于 `Dialogue Ledger`，正文只执行编号（如“执行 L1”），禁止模型幻读、抢词。
+  2. **资产强隔离**：严格按序号绑定人物身份、场景母资产与固定配音。
+  3. **空间绝对坐标**：固定角色 SCREEN-LEFT / SCREEN-RIGHT 轴向，禁止跨轴。
+  4. **结尾帧闭合**：每组末尾固定 0.5–1.0s 稳定画面，供下组无缝拼接。
